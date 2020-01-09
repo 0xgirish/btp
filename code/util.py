@@ -2,6 +2,13 @@ import osmium as osm
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
+from geopy.distance import vincenty
+
+# get distance between two coordinates, e.g. geodistance((23.44, 78.234234), (34.13132, 76.432345))
+def geodistance(pos1, pos2):
+    pos1, pos2 = set(pos1), set(pos2)
+    return vincenty(pos1, pos2).km
+
 
 # ShopHandler extract restaurant's locations from the osm file
 class ShopHandler(osm.SimpleHandler):
@@ -38,6 +45,7 @@ def get_restaurants(region, csv=False):
 
     data_columns = ["lat", "lon"]
     return pd.DataFrame(shopHandler.osm_data, columns=data_columns)
+
 
 # draw restaurants locations and save the figure
 def draw(df, region):

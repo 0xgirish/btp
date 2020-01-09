@@ -4,13 +4,39 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+CROSSOVER_PROBABILITY	constants.py	/^CROSSOVER_PROBABILITY = 0.5$/;"	v
+Init	algo.py	/^    def Init(cls, instance, radius, n_circles):$/;"	m	class:Model
+MUTATION_PROBABILITY	constants.py	/^MUTATION_PROBABILITY = 0.2$/;"	v
+Model	algo.py	/^class Model():$/;"	c
+N_CIRCLES	constants.py	/^N_CIRCLES = 12$/;"	v
+POPULATION	constants.py	/^POPULATION = 15$/;"	v
+RADIUS	constants.py	/^RADIUS = 0.02$/;"	v
+SELECTION_PERCENTAGE	constants.py	/^SELECTION_PERCENTAGE = 0.3$/;"	v
 ShopHandler	util.py	/^class ShopHandler(osm.SimpleHandler):$/;"	c
+__init__	algo.py	/^    def __init__(self, gnome=None):$/;"	m	class:Model
 __init__	util.py	/^    def __init__(self):$/;"	m	class:ShopHandler
+crossover	algo.py	/^    def crossover(cls, object1, object2):$/;"	m	class:Model
 draw	util.py	/^def draw(df, region):$/;"	f
+fitness	algo.py	/^    def fitness(self):$/;"	m	class:Model
+fitness	main.py	/^        fitness = [model.fitness() for model in models]$/;"	v
+fitness_per_iteration	main.py	/^    fitness_per_iteration = []$/;"	v
+geodistance	util.py	/^def geodistance(pos1, pos2):$/;"	f
 getLocation	util.py	/^    def getLocation(location):$/;"	m	class:ShopHandler
 get_restaurants	util.py	/^def get_restaurants(region, csv=False):$/;"	f
+instance	algo.py	/^    instance = None$/;"	v	class:Model
 is_restaurant	util.py	/^    def is_restaurant(elem):$/;"	m	class:ShopHandler
+kmean_draw	main.py	/^def kmean_draw(df, region):$/;"	f
+model_fitness	main.py	/^        model_fitness = sorted(model_fitness, key=lambda k: k[0], reverse=True)$/;"	v
+model_fitness	main.py	/^        model_fitness = zip(fitness, models)$/;"	v
+models	main.py	/^        models = Model.new_generation(population)$/;"	v
+models	main.py	/^    models = [Model() for _ in range(POPULATION)]$/;"	v
+mutation	algo.py	/^    def mutation(cls, obj):$/;"	m	class:Model
+n_circles	algo.py	/^    n_circles = None$/;"	v	class:Model
+new_generation	algo.py	/^    def new_generation(cls, population):$/;"	m	class:Model
 node	util.py	/^    def node(self, n):$/;"	m	class:ShopHandler
 parse_arguments	main.py	/^def parse_arguments():$/;"	f
+population	main.py	/^        population = []$/;"	v
+radius	algo.py	/^    radius = None$/;"	v	class:Model
+selection	algo.py	/^    def selection(cls, population):$/;"	m	class:Model
 shops	util.py	/^    def shops(self, elem):$/;"	m	class:ShopHandler
 to_csv	util.py	/^def to_csv(df, region):$/;"	f
