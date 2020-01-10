@@ -5,11 +5,10 @@ from util import geodistance
 import constants
 
 class Model():
-    # instance is the coordinates of restaurants in the region
-    instance = None
-    radius = None
-    n_circles = None
-    lat_range, lon_range = None, None
+    instance = None # instance is the coordinates of the restaurants
+    radius = None # radius is the distance a fully charged drone can travel from recharging station and come back with payload
+    n_circles = None # number of charging stations to cover restaurants
+    lat_range, lon_range = None, None # range of lattitude and longitude
 
     def __init__(self, gnome=None):
         if Model.instance is None:
