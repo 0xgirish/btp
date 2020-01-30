@@ -1,5 +1,7 @@
 import random
 import numpy as np
+from sklearn.cluster import KMeans
+from collections import defaultdict
 
 from util import geodistance
 import constants
@@ -10,14 +12,18 @@ class Model():
     n_circles = None # number of charging stations to cover restaurants
     lat_range, lon_range = None, None # range of lattitude and longitude
 
-    def __init__(self, gnome=None):
+    def __init__(self, gnome=None, log=False):
+        np.random.seed(seed=constants.SEED)
         if Model.instance is None:
             raise Exception('please initialize the model class first, e.g. Run Mode.Init(instance, radius, n_circles)')
 
+        self.log = log
         if gnome is None:
-            lats = np.random.uniform(Model.lat_range[0], Model.lat_range[1], Model.n_circles)
-            lons = np.random.uniform(Model.lon_range[0], Model.lon_range[1], Model.n_circles)
-            self.centers = np.column_stack((lats, lons))
+            kmeans = KMeans(n_clusters=Model.n_circles, random_state=0).fit(Model.instance.values[:, 1:])
+            self.centers = kmeans.cluster_centers_
+            # lats = np.random.uniform(Model.lat_range[0], Model.lat_range[1], Model.n_circles)
+            # lons = np.random.uniform(Model.lon_range[0], Model.lon_range[1], Model.n_circles)
+            # self.centers = np.column_stack((lats, lons))
         else:
             self.centers = gnome
 
@@ -33,7 +39,8 @@ class Model():
 
         covered_nodes_percentage = 100 * np.sum(covered != 0) / n_nodes
         overlaped_nodes_percentage = 100 * np.sum(covered > 1) / n_nodes
-        print(f'covered_nodes -> {covered_nodes_percentage} overlaped_nodes -> {overlaped_nodes_percentage}')
+        if self.log:
+            print(f'covered_nodes -> {covered_nodes_percentage} overlaped_nodes -> {overlaped_nodes_percentage}')
         
         return (covered_nodes_percentage - overlaped_nodes_percentage)
 
@@ -59,7 +66,7 @@ class Model():
         fit_models = population[0:round(constants.SELECTION_PERCENTAGE * constants.POPULATION)]
 
         for model in fit_models:
-            fit_models_copy.append(Model(gnome=model.centers))
+            fit_models_copy.append(Model(gnome=model.centers.copy()))
 
         return fit_models_copy
 
@@ -68,7 +75,7 @@ class Model():
         centers1, centers2 = object1.centers.copy(), object2.centers.copy()
 
         for i in range(Model.n_circles):
-            if random.randint(0, 100) <= constants.CROSSOVER_PROBABILITY * 100:
+            if np.random.uniform(0, 1) <= constants.CROSSOVER_PROBABILITY:
                 centers1[i], centers2[i] = centers2[i], centers1[i]
 
         return Model(gnome=centers1) if random.randint(0,1) == 0 else Model(gnome=centers2)
@@ -76,11 +83,14 @@ class Model():
 
     @classmethod
     def mutation(cls, obj):
-        centers = obj.centers
+        centers = obj.centers.copy()
 
         for i in range(Model.n_circles):
-            if random.randint(0, 100) <= constants.MUTATION_PROBABILITY * 100:
-                centers[i] += np.random.uniform(-0.008, 0.008, 2)
+            if np.random.uniform(0, 1) <= constants.MUTATION_PROBABILITY:
+                if constants.MUTATION_DISTRIBTION == "uniform":
+                    centers[i] += np.random.uniform(-constants.MUTATION_RANGE, constants.MUTATION_RANGE, 2)
+                else:
+                    centers[i] += np.random.normal(0, constants.MUTATION_RANGE, 2)
 
         return Model(gnome=centers)
 

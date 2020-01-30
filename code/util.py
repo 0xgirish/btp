@@ -1,4 +1,9 @@
+import argparse
+from sys import argv
+
 import osmium as osm
+from sklearn.cluster import KMeans
+import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
@@ -56,3 +61,28 @@ def draw(df, region):
 # save the result of dataframe to csv file
 def to_csv(df, region):
     df.to_csv(f'csv/{region}.csv')
+
+def parse_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-format', '--format', help='format of the file from which to extract dataframe', type=str)
+    parser.add_argument('-expno', '--expno', help='number of the expierment', type=int)
+    parser.add_argument('-region', '--region', help='name of the region for data', type=str)
+    parser.set_defaults(format='csv')
+
+    args = parser.parse_args()
+    df = util.get_restaurants(args.region, args.format == 'csv')
+    return df, args.region, args.format != 'csv', args.expno
+
+def kmean_draw(df, region, expno):
+    data = df.values[:, 1:]
+    km = KMeans(n_clusters=12, random_state=0)
+    km.fit(data)
+
+    prediction = km.predict(data)
+    centers = km.cluster_centers_
+
+    sns.scatterplot(x="lat", y="lon", data=df, hue=prediction)
+    plt.plot(centers[:, 0], centers[:, 1], 'o')
+    plt.savefig(f'experiments/exp-{expno}/fig/{region}.kmean.png', format='png')
+    plt.show()
+
