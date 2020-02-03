@@ -1,4 +1,5 @@
 import argparse
+import subprocess
 from sys import argv
 
 import osmium as osm
@@ -8,6 +9,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 from geopy.distance import vincenty
+
+import constants
 
 # get distance between two coordinates, e.g. geodistance((23.44, 78.234234), (34.13132, 76.432345))
 def geodistance(pos1, pos2):
@@ -53,10 +56,11 @@ def get_restaurants(region, csv=False):
 
 
 # draw restaurants locations and save the figure
-def draw(df, region):
+def draw(df, region, tag):
     sns.jointplot(x="lat", y="lon", data=df)
-    plt.savefig(f'fig/{region}.png', format='png')
+    plt.savefig(f'experiments/#{tag}/fig/{region}.png', format='png')
     plt.show()
+
 
 # save the result of dataframe to csv file
 def to_csv(df, region):
@@ -65,15 +69,18 @@ def to_csv(df, region):
 def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument('-format', '--format', help='format of the file from which to extract dataframe', type=str)
-    parser.add_argument('-expno', '--expno', help='number of the expierment', type=int)
+    parser.add_argument('-exp-tag', '--tag', help='experiment tag to organize results', type=str)
     parser.add_argument('-region', '--region', help='name of the region for data', type=str)
-    parser.set_defaults(format='csv')
+    parser.add_argument('-seed', '--seed', help='random seed for the experiment', type=int)
+    parser.set_defaults(format='csv', seed=None)
 
     args = parser.parse_args()
-    df = util.get_restaurants(args.region, args.format == 'csv')
-    return df, args.region, args.format != 'csv', args.expno
+    constants.change_seed(args.seed)
+    initialize_exp(args.tag)
+    df = get_restaurants(args.region, args.format == 'csv')
+    return df, args.region, args.format != 'csv', args.tag
 
-def kmean_draw(df, region, expno):
+def kmean_draw(df, region, tag):
     data = df.values[:, 1:]
     km = KMeans(n_clusters=12, random_state=0)
     km.fit(data)
@@ -83,6 +90,8 @@ def kmean_draw(df, region, expno):
 
     sns.scatterplot(x="lat", y="lon", data=df, hue=prediction)
     plt.plot(centers[:, 0], centers[:, 1], 'o')
-    plt.savefig(f'experiments/exp-{expno}/fig/{region}.kmean.png', format='png')
+    plt.savefig(f'experiments/#{tag}/fig/{region}.kmean.png', format='png')
     plt.show()
 
+def initialize_exp(tag):
+    subprocess.run(['mkdir', '-p', f'experiments/#{tag}/csv', f'experiments/#{tag}/fig'])

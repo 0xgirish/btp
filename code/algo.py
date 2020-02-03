@@ -21,9 +21,9 @@ class Model():
         if gnome is None:
             kmeans = KMeans(n_clusters=Model.n_circles, random_state=0).fit(Model.instance.values[:, 1:])
             self.centers = kmeans.cluster_centers_
-            # lats = np.random.uniform(Model.lat_range[0], Model.lat_range[1], Model.n_circles)
-            # lons = np.random.uniform(Model.lon_range[0], Model.lon_range[1], Model.n_circles)
-            # self.centers = np.column_stack((lats, lons))
+#           lats = np.random.uniform(Model.lat_range[0], Model.lat_range[1], Model.n_circles)
+#           lons = np.random.uniform(Model.lon_range[0], Model.lon_range[1], Model.n_circles)
+#           self.centers = np.column_stack((lats, lons))
         else:
             self.centers = gnome
 

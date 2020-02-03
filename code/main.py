@@ -1,23 +1,27 @@
 import matplotlib.pyplot as plt
+import pandas as pd
 
 import util
-from constants import RADIUS, N_CIRCLES, POPULATION
+import constants
 from algo import Model
+from result import show_gacluster
 
 # Create geneatic algorithm for set cover problem using fixed radius circles
 if __name__ == '__main__':
-    df, region, is_osm, expno = util.parse_arguments()
-    # util.draw(df, region)
+    df, region, is_osm, tag = util.parse_arguments()
+#   initialize constants for the region and create config file
+    constants.initialize(region, tag)
+    util.draw(df, region, tag)
     if is_osm:
         util.to_csv(df, region)
-    # kmean_draw(df, region)
-    Model.Init(df, RADIUS, N_CIRCLES)
+#   kmean_draw(df, region)
 
-    models = [Model() for _ in range(POPULATION)]
+    Model.Init(df, constants.RADIUS, constants.N_CIRCLES)
+    models = [Model() for _ in range(constants.POPULATION)]
     fitness_per_iteration = []
     best_model_centers = None
 
-    EPOCHS = 150
+    EPOCHS = constants.EPOCHS
     for i in range(EPOCHS):
         fitness = [model.fitness() for model in models]
         model_fitness = zip(fitness, models)
@@ -25,19 +29,21 @@ if __name__ == '__main__':
         fitness_per_iteration.append(model_fitness[0][0])
         population = []
 
-        for j in range(POPULATION):
+        for j in range(constants.POPULATION):
             population.append(model_fitness[j][1])
 
         models = Model.new_generation(population)
         best_model_centers = model_fitness[0][1].centers
         print(f'iterations: {i}, fitness: {model_fitness[0][0]}')
 
-    print('---------------------------------------')
-    print(f'{best_model_centers}')
-    print('---------------------------------------')
+
+    df.to_csv(f'experiments/#{tag}/csv/{region}.csv', index=False)
+    pd.DataFrame(best_model_centers, columns=['lat', 'lon']).to_csv(f'experiments/#{tag}/csv/centers.{region}.csv')
 
     plt.plot([i for i in range(0, EPOCHS)], fitness_per_iteration)
     plt.xlabel('iterations')
     plt.ylabel('best fitness')
-    plt.savefig(f'experiments/exp-{expno}/fig/{region}.genetic.png', format='png')
+    plt.savefig(f'experiments/#{tag}/fig/{region}.genetic.png', format='png')
     plt.show()
+
+    show_gacluster(df, region, tag)
