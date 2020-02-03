@@ -1,3 +1,4 @@
+
 import matplotlib.pyplot as plt
 import pandas as pd
 
@@ -8,12 +9,10 @@ from result import show_gacluster
 
 # Create geneatic algorithm for set cover problem using fixed radius circles
 if __name__ == '__main__':
-    df, region, is_osm, tag = util.parse_arguments()
+    df, region, tag = util.parse_arguments()
 #   initialize constants for the region and create config file
     constants.initialize(region, tag)
     util.draw(df, region, tag)
-    if is_osm:
-        util.to_csv(df, region)
 #   kmean_draw(df, region)
 
     Model.Init(df, constants.RADIUS, constants.N_CIRCLES)

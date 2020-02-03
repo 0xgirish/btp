@@ -4,7 +4,7 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
-EPOCHS	main.py	/^    EPOCHS = 150$/;"	v
+EPOCHS	main.py	/^    EPOCHS = constants.EPOCHS$/;"	v
 Init	algo.py	/^    def Init(cls, instance, radius, n_circles):$/;"	m	class:Model
 KMeans	algo.py	/^from sklearn.cluster import KMeans$/;"	i
 KMeans	result.py	/^from sklearn.cluster import KMeans$/;"	i
@@ -12,14 +12,12 @@ KMeans	util.py	/^from sklearn.cluster import KMeans$/;"	i
 Model	algo.py	/^class Model():$/;"	c
 Model	main.py	/^from algo import Model$/;"	i
 Model	result.py	/^from algo import Model$/;"	i
-N_CIRCLES	result.py	/^from constants import RADIUS, N_CIRCLES, POPULATION$/;"	i
-POPULATION	result.py	/^from constants import RADIUS, N_CIRCLES, POPULATION$/;"	i
-RADIUS	result.py	/^from constants import RADIUS, N_CIRCLES, POPULATION$/;"	i
+Obstacle	osm.py	/^class Obstacle:$/;"	c
 SEED	constants.py	/^SEED = None$/;"	v
-ShopHandler	util.py	/^class ShopHandler(osm.SimpleHandler):$/;"	c
-Y	result.py	/^    Y = [i for i in range(len(centers))]$/;"	v
+ShopHandler	osm.py	/^class ShopHandler(osm.SimpleHandler):$/;"	c
 __init__	algo.py	/^    def __init__(self, gnome=None, log=False):$/;"	m	class:Model
-__init__	util.py	/^    def __init__(self):$/;"	m	class:ShopHandler
+__init__	osm.py	/^    def __init__(self):$/;"	m	class:ShopHandler
+__init__	osm.py	/^    def __init__(self, nodes):$/;"	m	class:Obstacle
 __str__	algo.py	/^    def __str__(self):$/;"	m	class:Model	file:
 argparse	result.py	/^import argparse$/;"	i
 argparse	util.py	/^import argparse$/;"	i
@@ -29,28 +27,32 @@ best_model_centers	main.py	/^        best_model_centers = model_fitness[0][1].ce
 best_model_centers	main.py	/^    best_model_centers = None$/;"	v
 blr	constants.py	/^def blr():$/;"	f
 cdg	constants.py	/^def cdg():$/;"	f
-centers	result.py	/^    centers = pd.read_csv(f'experiments\/#{tag}\/csv\/{region}.centers.csv').values[:, 1:]$/;"	v
+change_seed	constants.py	/^def change_seed(seed):$/;"	f
 constants	algo.py	/^import constants$/;"	i
 constants	main.py	/^import constants$/;"	i
+constants	result.py	/^import constants $/;"	i
+constants	util.py	/^import constants$/;"	i
 crossover	algo.py	/^    def crossover(cls, object1, object2):$/;"	m	class:Model
 defaultdict	algo.py	/^from collections import defaultdict$/;"	i
 dlh	constants.py	/^def dlh():$/;"	f
+draw	osm.py	/^    def draw(self, fig):$/;"	m	class:Obstacle
 draw	util.py	/^def draw(df, region, tag):$/;"	f
 fitness	algo.py	/^    def fitness(self):$/;"	m	class:Model
 fitness	main.py	/^        fitness = [model.fitness() for model in models]$/;"	v
 fitness_per_iteration	main.py	/^    fitness_per_iteration = []$/;"	v
 geodistance	algo.py	/^from util import geodistance$/;"	i
 geodistance	util.py	/^def geodistance(pos1, pos2):$/;"	f
-getLocation	util.py	/^    def getLocation(location):$/;"	m	class:ShopHandler
+getLocation	osm.py	/^    def getLocation(location):$/;"	m	class:ShopHandler
 get_restaurants	util.py	/^def get_restaurants(region, csv=False):$/;"	f
 initialize	constants.py	/^def initialize(region, tag):$/;"	f
+initialize_exp	util.py	/^def initialize_exp(tag):$/;"	f
 instance	algo.py	/^    instance = None # instance is the coordinates of the restaurants$/;"	v	class:Model
-is_restaurant	util.py	/^    def is_restaurant(elem):$/;"	m	class:ShopHandler
-kmean_draw	util.py	/^def kmean_draw(df, region, expno):$/;"	f
+is_obstacle	osm.py	/^    def is_obstacle(w):$/;"	m	class:ShopHandler
+is_restaurant	osm.py	/^    def is_restaurant(elem):$/;"	m	class:ShopHandler
+kmean_draw	util.py	/^def kmean_draw(df, region, tag):$/;"	f
 matplotlib	main.py	/^import matplotlib.pyplot as plt$/;"	i
 matplotlib	result.py	/^import matplotlib.pyplot as plt$/;"	i
 matplotlib	util.py	/^import matplotlib.pyplot as plt$/;"	i
-model	result.py	/^    model = Model(gnome=centers, log=True)$/;"	v
 model_fitness	main.py	/^        model_fitness = sorted(model_fitness, key=lambda k: k[0], reverse=True)$/;"	v
 model_fitness	main.py	/^        model_fitness = zip(fitness, models)$/;"	v
 models	main.py	/^        models = Model.new_generation(population)$/;"	v
@@ -58,11 +60,12 @@ models	main.py	/^    models = [Model() for _ in range(constants.POPULATION)]$/;"
 mutation	algo.py	/^    def mutation(cls, obj):$/;"	m	class:Model
 n_circles	algo.py	/^    n_circles = None # number of charging stations to cover restaurants$/;"	v	class:Model
 new_generation	algo.py	/^    def new_generation(cls, population):$/;"	m	class:Model
-node	util.py	/^    def node(self, n):$/;"	m	class:ShopHandler
-nodes	result.py	/^    nodes = df.values[:, 1:]$/;"	v
+node	osm.py	/^    def node(self, n):$/;"	m	class:ShopHandler
 np	algo.py	/^import numpy as np$/;"	i
-osm	util.py	/^import osmium as osm$/;"	i
+osm	osm.py	/^import osmium as osm$/;"	i
+osm	util.py	/^import osm$/;"	i
 parse_arguments	util.py	/^def parse_arguments():$/;"	f
+pd	main.py	/^import pandas as pd$/;"	i
 pd	result.py	/^import pandas as pd$/;"	i
 pd	util.py	/^import pandas as pd$/;"	i
 plt	main.py	/^import matplotlib.pyplot as plt$/;"	i
@@ -72,11 +75,13 @@ population	main.py	/^        population = []$/;"	v
 radius	algo.py	/^    radius = None # radius is the distance a fully charged drone can travel from recharging station and come back with payload$/;"	v	class:Model
 random	algo.py	/^import random$/;"	i
 selection	algo.py	/^    def selection(cls, population):$/;"	m	class:Model
-shops	util.py	/^    def shops(self, elem):$/;"	m	class:ShopHandler
+show_gacluster	main.py	/^from result import show_gacluster$/;"	i
+show_gacluster	result.py	/^def show_gacluster(df, region, tag):$/;"	f
 sns	result.py	/^import seaborn as sns$/;"	i
 sns	util.py	/^import seaborn as sns$/;"	i
+subprocess	util.py	/^import subprocess$/;"	i
 to_csv	util.py	/^def to_csv(df, region):$/;"	f
 util	main.py	/^import util$/;"	i
 util	result.py	/^import util$/;"	i
 vincenty	util.py	/^from geopy.distance import vincenty$/;"	i
-y	result.py	/^    y = [len(centers) for i in range(df.shape[0])]$/;"	v
+way	osm.py	/^    def way(self, w):$/;"	m	class:ShopHandler
