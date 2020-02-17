@@ -10,7 +10,7 @@ from process import process
 # Create geneatic algorithm for set cover problem using fixed radius circles
 if __name__ == '__main__':
     region, tag = util.parse_arguments()
-    df = pd.read_csv(f'csv/{region}/shops.csv')
+    df = util.get_data(region)
     constants.initialize(region, tag)
 
     Model.Init(df, constants.RADIUS, constants.N_CIRCLES)

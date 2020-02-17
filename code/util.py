@@ -37,6 +37,7 @@ def draw(df, region, tag):
 def to_csv(df, region):
     df.to_csv(f'csv/{region}.csv', index=False)
 
+# parser arguments and create subdireactories for experiments
 def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument('-exp-tag', '--tag', help='experiment tag to organize results', type=str)
