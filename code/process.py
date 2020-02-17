@@ -3,6 +3,7 @@ import subprocess
 
 import osm
 import numpy as np
+import pandas as pd
 from geopy.distance import geodesic
 
 
@@ -28,10 +29,10 @@ def process(region):
 def xytransform(region, lat, lon):
     df = pd.read_csv(f'csv/{region}/shops.csv')
 
-    size = df.shape[0]
+    ratios, size = list(), df.shape[0]
     for i in range(size):
         u = df.iloc[i]
-        for j in range(size):
+        for j in range(i+1, size):
             v = df.iloc[j]
             e, g = edistance(u, v), gdistance(u, v).km
             ratios.append(g/e)
