@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.cluster import KMeans
 from collections import defaultdict
 
-from util import geodistance
+from util import geodistance, distance
 import constants
 
 class Model():

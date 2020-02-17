@@ -12,7 +12,7 @@ from algo import Model
 
 
 def show_gacluster(df, region, tag):
-    centers = pd.read_csv(f'experiments/#{tag}/csv/centers.{region}.csv').values[:, 1:]
+    centers = pd.read_csv(f'experiments/#{tag}/csv/centers.{region}.csv').values
     
     Model.Init(df, constants.RADIUS, constants.N_CIRCLES)
     model = Model(gnome=centers, log=True)

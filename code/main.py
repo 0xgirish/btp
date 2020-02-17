@@ -1,4 +1,3 @@
-
 import matplotlib.pyplot as plt
 import pandas as pd
 
@@ -6,14 +5,13 @@ import util
 import constants
 from algo import Model
 from result import show_gacluster
+from process import process 
 
 # Create geneatic algorithm for set cover problem using fixed radius circles
 if __name__ == '__main__':
-    df, region, tag = util.parse_arguments()
-#   initialize constants for the region and create config file
+    region, tag = util.parse_arguments()
+    df = pd.read_csv(f'csv/{region}/shops.csv')
     constants.initialize(region, tag)
-    util.draw(df, region, tag)
-#   kmean_draw(df, region)
 
     Model.Init(df, constants.RADIUS, constants.N_CIRCLES)
     models = [Model() for _ in range(constants.POPULATION)]
@@ -37,7 +35,7 @@ if __name__ == '__main__':
 
 
     df.to_csv(f'experiments/#{tag}/csv/{region}.csv', index=False)
-    pd.DataFrame(best_model_centers, columns=['lat', 'lon']).to_csv(f'experiments/#{tag}/csv/centers.{region}.csv')
+    pd.DataFrame(best_model_centers, columns=['lat', 'lon']).to_csv(f'experiments/#{tag}/csv/centers.{region}.csv', index=Flase)
 
     plt.plot([i for i in range(0, EPOCHS)], fitness_per_iteration)
     plt.xlabel('iterations')

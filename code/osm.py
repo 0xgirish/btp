@@ -1,5 +1,9 @@
+import sys
+
 import osmium as osm
 import pandas as pd
+
+FLOAT_MAX = sys.float_info.max
 
 # An obstacle contains nodes (lat, lon) which forms a polygon and has height >= 12
 class Obstacle:
@@ -16,13 +20,16 @@ class ShopHandler(osm.SimpleHandler):
     def __init__(self, region=None):
         osm.SimpleHandler.__init__(self)
         self.region = region
-        self.osm_data = list()
-        self.obstacles = list() # contains list of all the building which have height >= 12 m
+        self.minlat, self.minlon = FLOAT_MAX, FLOAT_MAX
+        self.osm_data, self.obstacles = list(), list() # contains list of all the building which have height >= 12 m
 
 #   add nodes which are restaurants
     def node(self, n):
+        location = ShopHandler.getLocation(n.location)
+        self.minlat = location[0] if location[0] < self.minlat else self.minlat
+        self.minlon = location[1] if location[1] < self.minlon else self.minlon
         if ShopHandler.is_restaurant(n):
-            self.osm_data.append(ShopHandler.getLocation(n.location))
+            self.osm_data.append(location)
 
 #   check for buildings with height greater then 12m
     def way(self, w):
@@ -35,7 +42,7 @@ class ShopHandler(osm.SimpleHandler):
     def to_csv(self):
         data_columns = ['lat', 'lon']
         df = pd.DataFrame(self.osm_data, columns=data_columns)
-        df.to_csv(f'csv/{self.region}/shops.csv')
+        df.to_csv(f'csv/{self.region}/shops.csv', index=False)
         return df
 
     @staticmethod
