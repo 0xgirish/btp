@@ -23,10 +23,10 @@ def process(region):
     shopHandler.to_csv()
 
     # trasform lat, lon to xy coordinates
-    xytransform(region, shopHandler.minlat, shopHandler.minlon)
+    xytransform(region, shopHandler)
 
 # lat, lon are minimum lattitude and longitude in entire region
-def xytransform(region, lat, lon):
+def xytransform(region, handler):
     df = pd.read_csv(f'csv/{region}/shops.csv')
 
     ratios, size = list(), df.shape[0]
@@ -38,7 +38,7 @@ def xytransform(region, lat, lon):
             ratios.append(g/e)
 
     constants = pd.Series(ratios)
-    transformed = constants.mean() * (df - np.array([lat, lon]))
+    transformed = constants.mean() * df
     transformed.to_csv(f'csv/{region}/shops.xy.csv', index=False)
 
 

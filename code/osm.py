@@ -21,6 +21,7 @@ class ShopHandler(osm.SimpleHandler):
         osm.SimpleHandler.__init__(self)
         self.region = region
         self.minlat, self.minlon = FLOAT_MAX, FLOAT_MAX
+        self.maxlat, self.maxlon = -1, -1
         self.osm_data, self.obstacles = list(), list() # contains list of all the building which have height >= 12 m
 
 #   add nodes which are restaurants
@@ -28,6 +29,8 @@ class ShopHandler(osm.SimpleHandler):
         location = ShopHandler.getLocation(n.location)
         self.minlat = location[0] if location[0] < self.minlat else self.minlat
         self.minlon = location[1] if location[1] < self.minlon else self.minlon
+        self.maxlat = location[0] if location[0] > self.maxlat else self.maxlat
+        self.maxlon = location[1] if location[1] > self.maxlon else self.maxlon
         if ShopHandler.is_restaurant(n):
             self.osm_data.append(location)
 
