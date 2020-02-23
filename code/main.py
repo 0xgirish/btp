@@ -40,4 +40,4 @@ if __name__ == '__main__':
     plt.xlabel('iterations')
     plt.ylabel('best fitness')
     plt.savefig(f'experiments/exp-{expno}/fig/{region}.genetic.png', format='png')
-    plt.show()
+#   plt.show()
